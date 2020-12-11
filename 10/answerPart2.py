@@ -4,38 +4,44 @@ with open('input', newline='\r\n') as inputfile:
 input = [int(i) for i in input]
 # print(input)
 input.sort()
-# print(input)
-oneDiff=0
-twoDiff=0
-threeDiff=0
-for index,adapter in enumerate(input):
-    try:
-        # print(index,' ',input[index],' ',input[index-1])
-        if(index==0):
-            difference=input[index]
+print(input)
+input.insert(0,0)
+resultList=[]
+
+problemNumbers=[]
+
+def recurCheckPath(resultList,tempResultList,index):
+    if(input[index]in problemNumbers):
+        return
+    newtempResultList=tempResultList.copy()
+    newtempResultList.append(input[index])
+    if(index==len(input)-1):
+        resultList.append(newtempResultList)
+        return
+    didOne=False
+    for i in range(1,10):
+        try:
+            difference=input[index + i] - input[index]
+        except Exception as e:
+            # print(e)
+            # newtempResultList.append(input[index])
+            # resultList.append(newtempResultList)
+            return
+        # print(input[index+i],' ',input[index],' ',difference)
+        if(difference<4):
+            didOne=True
+            recurCheckPath(resultList,newtempResultList,index+i)
         else:
-            difference=input[index]-input[index-1]
-        # print(difference)
-        if(difference>3):
+            # problemNumbers.append(input[index])
+            # resultList.append(newtempResultList)
             break
-        if(difference==1):
-            oneDiff=oneDiff+1
-        if (difference == 2):
-            twoDiff = twoDiff + 1
-        if (difference == 3):
-            threeDiff = threeDiff + 1
-    except Exception as e:
-        difference=input[index]
-        if (difference > 3):
-            break
-        if (difference == 1):
-            oneDiff = oneDiff + 1
-        if (difference == 2):
-            twoDiff = twoDiff + 1
-        if (difference == 3):
-            threeDiff = threeDiff + 1
-        print(e)
-        break
-threeDiff=threeDiff+1
-# print(oneDiff,' ',threeDiff)
-print(oneDiff*threeDiff)
+    if(not didOne):
+        problemNumbers.append(input[index])
+recurCheckPath(resultList,[],0)
+print("finished gathering potentials")
+unique_data = [list(x) for x in set(tuple(x) for x in resultList)]
+
+print(len(resultList))
+# print(resultList)
+
+# not 3
